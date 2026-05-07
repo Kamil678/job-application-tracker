@@ -3,10 +3,10 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
-import Image from "next/image";
 import { Logo } from "../logo";
+import Link from "next/link";
 
-export function Navbar() {
+export function NavbarLandingPage() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -41,12 +41,16 @@ export function Navbar() {
 
         {/* Actions */}
         <div className="hidden md:flex items-center gap-3">
-          <Button variant="ghost" size="lg" className="text-muted-foreground cursor-pointer">
-            Sign in
-          </Button>
-          <Button size="lg" className="bg-primary hover:bg-accent-foreground text-white shadow-sm  cursor-pointer">
-            Get started free
-          </Button>
+          <Link href="/sign-in">
+            <Button variant="ghost" size="lg" className="cursor-pointer">
+              Sign in
+            </Button>
+          </Link>
+          <Link href="/sign-up">
+            <Button size="lg" className="shadow-sm cursor-pointer">
+              Get started free
+            </Button>
+          </Link>
         </div>
 
         {/* Mobile toggle */}

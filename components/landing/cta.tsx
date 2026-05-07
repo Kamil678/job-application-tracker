@@ -21,7 +21,7 @@ export function CTA() {
         <div className="relative z-10 max-w-xl mx-auto">
           <h2 className="text-5xl font-bold tracking-tight text-white mb-5 leading-tight">Your next job starts here.</h2>
           <p className="text-lg text-slate-400 mb-10">Join thousands of developers and designers who stopped losing track.</p>
-          <Button size="lg" className="bg-primary hover:bg-blue-500 text-white gap-2 px-10 shadow-2xl shadow-blue-500/30 cursor-pointer">
+          <Button size="lg" className="gap-2 px-10 shadow-2xl shadow-blue-500/30">
             Create free account
             <ArrowRight size={16} />
           </Button>

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Logo } from "../logo";
 
 const LINKS = {
@@ -36,7 +35,7 @@ export function Footer() {
         </div>
 
         <div className="pt-6 border-t border-border flex flex-col md:flex-row justify-between items-center gap-3">
-          <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} Hirely. All rights reserved.</p>
+          <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} JAT. All rights reserved.</p>
           <p className="text-xs text-muted-foreground">Built with precision.</p>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/status-badge";
 import { ArrowRight, MapPin, CalendarDays } from "lucide-react";
+import Link from "next/link";
 
 const JOBS = [
   { company: "Spotify", role: "Frontend Developer", location: "Remote", date: "Apr 28", initial: "S", color: "#1DB954", status: "applied" },
@@ -41,14 +42,13 @@ export function Hero() {
           </p>
 
           <div className="flex flex-wrap gap-3">
-            <Button
-              size="lg"
-              className="bg-primary hover:bg-accent-foreground text-white gap-2 shadow-lg shadow-blue-200 px-7 cursor-pointer"
-            >
-              Start for free
-              <ArrowRight size={16} />
-            </Button>
-            <Button size="lg" variant="outline" className="border-border text-foreground px-7 cursor-pointer">
+            <Link href="/sign-up">
+              <Button size="lg" className="gap-2 shadow-lg shadow-blue-200 px-7">
+                Start for free
+                <ArrowRight size={16} />
+              </Button>
+            </Link>
+            <Button size="lg" variant="outline" className="border-border text-foreground px-7">
               See how it works
             </Button>
           </div>

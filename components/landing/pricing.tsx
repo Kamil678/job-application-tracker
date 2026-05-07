@@ -41,7 +41,7 @@ export function Pricing() {
             ))}
           </ul>
 
-          <Button size="lg" variant="outline" className="w-full border-border cursor-pointer">
+          <Button size="lg" variant="outline" className="w-full border-border">
             Get started free
           </Button>
         </div>
