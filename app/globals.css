@@ -62,7 +62,7 @@
 
 /* ─── LIGHT ─────────────────────────────────── */
 :root {
-  --radius: 0.625rem;
+  --radius: 0.5rem;
 
   --background: #f5f9ff;
   --foreground: #0c2340;

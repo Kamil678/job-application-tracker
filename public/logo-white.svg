@@ -15,14 +15,14 @@
   <path d="M26 36 L44 36" stroke="white" stroke-width="3.5" stroke-linecap="round"/>
 
   <!-- Text -->
-  <text x="76" y="40" font-size="36" fill="#0f172a"
+  <text x="76" y="40" font-size="36" fill="#fff"
         font-family="Inter, system-ui, -apple-system, sans-serif"
         font-weight="600" letter-spacing="0.5">
     JAT
   </text>
 
   <!-- Subtle tagline -->
-  <text x="76" y="60" font-size="14" fill="#64748b"
+  <text x="76" y="60" font-size="14" fill="#eaf2fb"
         font-family="Inter, system-ui, -apple-system, sans-serif">
     job application tracker
   </text>
