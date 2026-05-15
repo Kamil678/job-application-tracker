@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
-// import { signIn } from "@/lib/auth-client";
+import { signIn } from "@/lib/auth/auth-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,20 +21,26 @@ export default function SignInPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    // const { error: authError } = await signIn.email({
-    //   email,
-    //   password,
-    //   callbackURL: "/dashboard",
-    // });
-    // if (authError) {
-    //   setError("Invalid email or password.");
-    //   setLoading(false);
-    // }
+    try {
+      const { error: authError } = await signIn.email({
+        email,
+        password,
+      });
+      if (authError) {
+        setError(authError.message ?? "Invalid email or password.");
+      } else {
+        router.push("/app/dashboard");
+      }
+    } catch (e) {
+      setError("An unexpected error occurred");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -43,14 +49,14 @@ export default function SignInPage() {
         <h2 className="text-xl font-bold tracking-tight text-foreground">Welcome back</h2>
         <p className="text-sm text-muted-foreground">
           Don&apos;t have an account?{" "}
-          <Link href="/sign-up" className="text-primary font-medium hover:underline underline-offset-4 transition-colors">
+          <Link href="/register" className="text-primary font-medium hover:underline underline-offset-4 transition-colors">
             Sign up free
           </Link>
         </p>
       </div>
 
       <div className="space-y-4">
-        <SocialAuthButtons callbackURL="/dashboard" />
+        <SocialAuthButtons callbackURL="/app/dashboard" />
         <AuthDivider />
 
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>

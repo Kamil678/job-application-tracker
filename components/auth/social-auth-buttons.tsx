@@ -9,7 +9,7 @@ interface SocialAuthButtonsProps {
   callbackURL?: string;
 }
 
-export function SocialAuthButtons({ callbackURL = "/dashboard" }: SocialAuthButtonsProps) {
+export function SocialAuthButtons({ callbackURL = "/app/dashboard" }: SocialAuthButtonsProps) {
   const [loadingProvider, setLoadingProvider] = useState<"google" | "github" | null>(null);
 
   async function handleSocial(provider: "google" | "github") {

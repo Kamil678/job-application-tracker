@@ -10,10 +10,7 @@ const STATS = [
 export function AuthBrandHeader() {
   return (
     <div className="flex flex-col items-center text-center gap-5 max-w-120">
-      <Link href="/" className="outline-none focus-visible:ring-2 focus-visible:ring-white/40 rounded-md">
-        <Logo variant="light" />
-      </Link>
-
+      <Logo variant="light" />
       <div className="space-y-2">
         <h1 className="text-3xl font-bold tracking-tight leading-tight text-sidebar-foreground">
           Take control of your <span className="text-sidebar-primary">job search.</span>

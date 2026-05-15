@@ -42,7 +42,7 @@ export function Hero() {
           </p>
 
           <div className="flex flex-wrap gap-3">
-            <Link href="/sign-up">
+            <Link href="/register">
               <Button size="lg" className="gap-2 shadow-lg shadow-blue-200 px-7">
                 Start for free
                 <ArrowRight size={16} />

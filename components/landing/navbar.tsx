@@ -41,12 +41,12 @@ export function NavbarLandingPage() {
 
         {/* Actions */}
         <div className="hidden md:flex items-center gap-3">
-          <Link href="/sign-in">
+          <Link href="/login">
             <Button variant="ghost" size="lg" className="cursor-pointer">
               Sign in
             </Button>
           </Link>
-          <Link href="/sign-up">
+          <Link href="/register">
             <Button size="lg" className="shadow-sm cursor-pointer">
               Get started free
             </Button>

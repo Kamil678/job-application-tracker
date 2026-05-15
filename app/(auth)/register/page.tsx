@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
-// import { signUp } from "@/lib/auth-client";
+import { signUp } from "@/lib/auth/auth-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,21 +23,27 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    // const { error: authError } = await signUp.email({
-    //   name,
-    //   email,
-    //   password,
-    //   callbackURL: "/dashboard",
-    // });
-    // if (authError) {
-    //   setError("Could not create account. Please try again.");
-    //   setLoading(false);
-    // }
+    try {
+      const { error: authError } = await signUp.email({
+        name,
+        email,
+        password,
+      });
+      if (authError) {
+        setError(authError.message ?? "Could not create account. Please try again.");
+      } else {
+        router.push("/app/dashboard");
+      }
+    } catch (e) {
+      setError("An unexpected error occurred");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -47,14 +53,14 @@ export default function SignUpPage() {
         <h2 className="text-xl font-bold tracking-tight text-foreground">Create your account</h2>
         <p className="text-sm text-muted-foreground">
           Already have an account?{" "}
-          <Link href="/sign-in" className="text-primary font-medium hover:underline underline-offset-4 transition-colors">
+          <Link href="/login" className="text-primary font-medium hover:underline underline-offset-4 transition-colors">
             Sign in
           </Link>
         </p>
       </div>
 
       <div className="space-y-4">
-        <SocialAuthButtons callbackURL="/dashboard" />
+        <SocialAuthButtons callbackURL="/app/dashboard" />
         <AuthDivider label="or sign up with email" />
 
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
@@ -63,7 +69,7 @@ export default function SignUpPage() {
             <Input
               id="name"
               type="text"
-              placeholder="Jan Kowalski"
+              placeholder="John Doe"
               autoComplete="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -103,11 +109,7 @@ export default function SignUpPage() {
 
           <AuthFormError message={error} />
 
-          <Button
-            type="submit"
-            disabled={loading}
-            className="w-full h-10 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2 shadow-sm"
-          >
+          <Button type="submit" size="lg" disabled={loading} className="w-full font-semibold gap-2 shadow-sm">
             {loading ? (
               <>
                 <span className="size-4 rounded-full border-2 border-primary-foreground/30 border-t-primary-foreground animate-spin" />

@@ -17,6 +17,7 @@
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
+  --color-sidebar-text: var(--sidebar-text);
   --color-chart-5: var(--chart-5);
   --color-chart-4: var(--chart-4);
   --color-chart-3: var(--chart-3);
@@ -101,6 +102,7 @@
   /* Sidebar — głęboki granat dla kontrastu */
   --sidebar: #0c2d48;
   --sidebar-foreground: #e8f2fb;
+  --sidebar-text: rgba(232, 242, 251, 0.5);
   --sidebar-primary: #1e88e5;
   --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #153a5c;
