@@ -25,12 +25,16 @@ export function UserDropdown({ user }: UserDropdownProps) {
   const initials = getInitials(user.name);
 
   async function handleSignOut() {
-    await authClient.signOut();
-    router.push("/login");
+    const resault = await authClient.signOut();
+    if (resault?.data?.success) {
+      router.push("/login");
+    } else {
+      alert("Error during sign out");
+    }
   }
 
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger
         className="flex items-center gap-2.5 w-full px-2.5 py-2 rounded-lg
             hover:bg-sidebar-accent text-left cursor-pointer
