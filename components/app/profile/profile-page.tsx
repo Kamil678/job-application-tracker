@@ -25,7 +25,6 @@ export function ProfilePage({ user }: ProfilePageProps) {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-foreground">Profile</h1>
@@ -36,17 +35,15 @@ export function ProfilePage({ user }: ProfilePageProps) {
         </Badge>
       </div>
 
-      {/* Stats */}
       <ProfileStats applicationsCount={user.applicationsCount} interviewsCount={user.interviewsCount} offersCount={user.offersCount} />
 
-      {/* Tabs */}
       <Tabs defaultValue="profile" className="space-y-5">
-        <TabsList className="rounded-2xl bg-muted p-1 h-auto gap-1">
+        <TabsList className="rounded-full bg-muted p-1 h-auto gap-1">
           {TABS.map(({ value, icon: Icon, label }) => (
             <TabsTrigger
               key={value}
               value={value}
-              className="rounded-xl text-xs font-medium px-3 py-1.5 gap-1.5 data-[state=active]:bg-background data-[state=active]:shadow-sm"
+              className="rounded-full text-xs font-medium px-3 py-1.5 gap-1.5 cursor-pointer data-[state=active]:bg-background data-[state=active]:shadow-sm"
             >
               <Icon size={13} />
               {label}

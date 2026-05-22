@@ -1,6 +1,4 @@
-import { LayoutDashboard, FileText, Kanban, Calendar, BarChart3, Bot, Star, FileUser, Settings, type LucideIcon } from "lucide-react";
-
-// ─── Types ────────────────────────────────────────────────────────────────────
+import { LayoutDashboard, FileText, Kanban, Calendar, Settings, type LucideIcon } from "lucide-react";
 
 export type BadgeVariant = "primary" | "warning" | "info";
 
@@ -20,9 +18,8 @@ export interface NavSection {
 export interface User {
   name: string;
   email: string;
+  image: string;
 }
-
-// ─── Navigation ───────────────────────────────────────────────────────────────
 
 export const NAV: NavSection[] = [
   {
@@ -66,8 +63,6 @@ export const NAV: NavSection[] = [
   },
 ];
 
-// ─── Page titles (used in topbar) ─────────────────────────────────────────────
-
 export const PAGE_TITLES: Record<string, string> = {
   "/app/dashboard": "Dashboard",
   "/applications": "Applications",
@@ -76,9 +71,6 @@ export const PAGE_TITLES: Record<string, string> = {
   "/app/settings": "Settings",
 };
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-/** Returns up to 2 uppercase initials from a full name. */
 export function getInitials(name: string): string {
   return name
     .split(" ")
@@ -88,7 +80,6 @@ export function getInitials(name: string): string {
     .toUpperCase();
 }
 
-/** Returns true when the nav item's href matches the current pathname. */
 export function isNavItemActive(href: string, pathname: string): boolean {
   return href === "/app/dashboard" ? pathname === "/app/dashboard" : pathname.startsWith(href);
 }

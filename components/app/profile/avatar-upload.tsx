@@ -1,10 +1,14 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { Camera, Upload, Trash2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { Camera, Upload, Trash2, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import type { ProfileUser } from "./types";
+
+type Status = "idle" | "uploading" | "deleting";
 
 function getInitials(name: string): string {
   return name
@@ -15,29 +19,104 @@ function getInitials(name: string): string {
     .slice(0, 2);
 }
 
-interface AvatarUploadProps {
-  user: ProfileUser;
-  onSave: (file: File) => void;
+function validateImageFile(file: File): string | null {
+  if (!file.type.startsWith("image/")) return "File must be an image";
+  if (file.size > 5 * 1024 * 1024) return "File must be under 5MB";
+  return null;
 }
 
-export function AvatarUpload({ user, onSave }: AvatarUploadProps) {
+interface AvatarUploadProps {
+  user: ProfileUser;
+  onUploaded?: (url: string) => void;
+}
+
+export function AvatarUpload({ user, onUploaded }: AvatarUploadProps) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(user.image ?? null);
   const [dragging, setDragging] = useState(false);
+  const [status, setStatus] = useState<Status>("idle");
 
-  function handleFile(file: File) {
-    if (!file.type.startsWith("image/")) return;
-    const url = URL.createObjectURL(file);
-    setPreview(url);
-    onSave(file);
+  const isBusy = status !== "idle";
+
+  // Zwolnij blob URL przy odmontowaniu
+  useEffect(() => {
+    return () => {
+      if (preview?.startsWith("blob:")) URL.revokeObjectURL(preview);
+    };
+  }, [preview]);
+
+  async function handleFile(file: File) {
+    const error = validateImageFile(file);
+    if (error) {
+      toast.error(error);
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(file);
+    const previousPreview = preview;
+
+    setPreview((prev) => {
+      if (prev?.startsWith("blob:")) URL.revokeObjectURL(prev);
+      return objectUrl;
+    });
+    setStatus("uploading");
+
+    try {
+      const formData = new FormData();
+      formData.append("avatar", file);
+
+      const res = await fetch("/api/upload-avatar", { method: "POST", body: formData });
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.error ?? "Upload failed");
+        setPreview(previousPreview);
+        return;
+      }
+
+      toast.success("Avatar updated!");
+      onUploaded?.(data.url);
+    } catch {
+      toast.error("Something went wrong");
+      setPreview(previousPreview);
+    } finally {
+      setStatus("idle");
+    }
+  }
+
+  async function handleRemove() {
+    setStatus("deleting");
+    try {
+      const res = await fetch("/api/delete-avatar", { method: "DELETE" });
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.error ?? "Failed to remove avatar");
+        return;
+      }
+
+      setPreview(null);
+      toast.success("Avatar removed");
+      onUploaded?.("");
+    } catch {
+      toast.error("Something went wrong");
+    } finally {
+      setStatus("idle");
+    }
   }
 
   return (
     <div className="flex flex-col items-center gap-4">
       <div
-        className={`relative group w-24 h-24 rounded-3xl border-2 transition-all duration-200 cursor-pointer
-          ${dragging ? "border-primary scale-105" : "border-border hover:border-primary/50"}`}
+        role="button"
+        tabIndex={isBusy ? -1 : 0}
+        aria-label="Upload avatar"
+        aria-busy={isBusy}
+        className={`relative group w-24 h-24 rounded-lg transition-all duration-200 cursor-pointer
+          ${dragging ? "scale-105" : ""}
+          ${isBusy ? "pointer-events-none" : ""}`}
         onClick={() => fileRef.current?.click()}
+        onKeyDown={(e) => e.key === "Enter" && fileRef.current?.click()}
         onDragOver={(e) => {
           e.preventDefault();
           setDragging(true);
@@ -51,14 +130,15 @@ export function AvatarUpload({ user, onSave }: AvatarUploadProps) {
         }}
       >
         {preview ? (
-          <img src={preview} alt="Avatar" className="w-full h-full rounded-3xl object-cover" />
+          <Image src={preview} alt="Avatar" fill unoptimized={preview.startsWith("blob:")} className="rounded-lg object-cover" />
         ) : (
-          <div className="w-full h-full rounded-3xl bg-sidebar-primary flex items-center justify-center text-white text-2xl font-bold">
+          <div className="w-full h-full rounded-lg bg-sidebar-primary flex items-center justify-center text-white text-2xl font-bold">
             {getInitials(user.name)}
           </div>
         )}
-        <div className="absolute inset-0 rounded-3xl bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-          <Camera size={18} className="text-white" />
+
+        <div className="absolute inset-0 rounded-lg bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+          {isBusy ? <Loader2 size={18} className="text-white animate-spin" /> : <Camera size={18} className="text-white" />}
         </div>
       </div>
 
@@ -81,20 +161,15 @@ export function AvatarUpload({ user, onSave }: AvatarUploadProps) {
         </Badge>
       </div>
 
-      <Button variant="outline" size="sm" className="rounded-xl text-xs gap-1.5" onClick={() => fileRef.current?.click()}>
-        <Upload size={13} />
-        Upload photo
+      <Button variant="outline" size="sm" disabled={isBusy} onClick={() => fileRef.current?.click()}>
+        {status === "uploading" ? <Loader2 size={13} className="animate-spin" /> : <Upload size={13} />}
+        {status === "uploading" ? "Uploading..." : "Upload photo"}
       </Button>
 
-      {preview && preview !== user.image && (
-        <Button
-          variant="ghost"
-          size="sm"
-          className="rounded-xl text-xs text-muted-foreground gap-1.5"
-          onClick={() => setPreview(user.image ?? null)}
-        >
-          <Trash2 size={13} />
-          Remove
+      {preview && status !== "uploading" && (
+        <Button variant="destructive" size="sm" disabled={isBusy} onClick={handleRemove}>
+          {status === "deleting" ? <Loader2 size={13} className="animate-spin" /> : <Trash2 size={13} />}
+          {status === "deleting" ? "Removing..." : "Remove"}
         </Button>
       )}
     </div>

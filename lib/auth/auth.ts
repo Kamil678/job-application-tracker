@@ -18,6 +18,15 @@ export const auth = betterAuth({
     deleteUser: {
       enabled: true,
     },
+    additionalFields: {
+      jobTitle: { type: "string", nullable: true },
+      location: { type: "string", nullable: true },
+      phone: { type: "string", nullable: true },
+      websiteUrl: { type: "string", nullable: true },
+      githubUrl: { type: "string", nullable: true },
+      linkedinUrl: { type: "string", nullable: true },
+      bio: { type: "string", nullable: true },
+    },
   },
 });
 

@@ -6,9 +6,9 @@ export interface ProfileUser {
   jobTitle?: string;
   location?: string;
   phone?: string;
-  website?: string;
-  github?: string;
-  linkedin?: string;
+  websiteUrl?: string;
+  githubUrl?: string;
+  linkedinUrl?: string;
   bio?: string;
   plan: "free" | "pro" | "team";
   createdAt: string;

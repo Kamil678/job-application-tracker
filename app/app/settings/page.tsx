@@ -11,21 +11,23 @@ export default async function Page() {
     redirect("/login");
   }
 
+  const user = session.user;
+
   const profileUser: ProfileUser = {
-    id: session.user.id,
-    name: session.user.name,
-    email: session.user.email,
-    image: session.user.image ?? null,
-    jobTitle: "", // profile?.jobTitle ?? ""
-    location: "", // profile?.location ?? ""
-    phone: "", // profile?.phone ?? ""
-    website: "", // profile?.website ?? ""
-    github: "", // profile?.github ?? ""
-    linkedin: "", // profile?.linkedin ?? ""
-    bio: "", // profile?.bio ?? ""
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    image: user.image ?? null,
+    jobTitle: user.jobTitle ?? "",
+    location: user.location ?? "",
+    phone: user.phone ?? "",
+    websiteUrl: user.websiteUrl ?? "",
+    githubUrl: user.githubUrl ?? "",
+    linkedinUrl: user.linkedinUrl ?? "",
+    bio: user.bio ?? "",
     plan: "free" as const,
     createdAt: session.user.createdAt?.toISOString() ?? new Date().toISOString(),
-    applicationsCount: 0, // await db.applications.count({ userId: session.user.id })
+    applicationsCount: 0,
     interviewsCount: 0,
     offersCount: 0,
   };

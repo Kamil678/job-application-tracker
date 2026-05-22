@@ -18,6 +18,7 @@ export default async function AppLayout({ children }: AppLayoutProps) {
       user={{
         name: session.user.name,
         email: session.user.email,
+        image: session.user.image,
       }}
     >
       {children}

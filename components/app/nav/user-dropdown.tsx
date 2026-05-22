@@ -13,6 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { getInitials, type User as UserType } from "./nav-config";
 
@@ -41,12 +42,11 @@ export function UserDropdown({ user }: UserDropdownProps) {
             focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring"
         aria-label="User menu"
       >
-        <div
-          aria-hidden="true"
-          className="w-7.5 h-7.5 rounded-full bg-sidebar-primary shrink-0 flex items-center justify-center text-[11px] font-semibold text-white"
-        >
-          {initials}
-        </div>
+        <Avatar className="w-7.5 h-7.5 shrink-0 text-[11px]">
+          <AvatarImage src={user.image ?? undefined} alt={user.name} />
+          <AvatarFallback className="bg-sidebar-primary text-white text-[11px] font-semibold">{initials}</AvatarFallback>
+        </Avatar>
+
         <div className="flex-1 overflow-hidden">
           <p className="text-[12px] font-medium text-sidebar-foreground truncate">{user.name}</p>
           <p className="text-[11px] text-sidebar-text">Free plan</p>
@@ -55,9 +55,15 @@ export function UserDropdown({ user }: UserDropdownProps) {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent side="top" align="end" className="w-47 mb-1 p-0">
-        <div className="px-3 py-2">
-          <p className="text-sm font-medium truncate">{user.name}</p>
-          <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+        <div className="flex items-center gap-2.5 px-3 py-2">
+          <Avatar className="w-8 h-8 shrink-0">
+            <AvatarImage src={user.image ?? undefined} alt={user.name} />
+            <AvatarFallback className="bg-sidebar-primary text-white text-[11px] font-semibold">{initials}</AvatarFallback>
+          </Avatar>
+          <div className="overflow-hidden">
+            <p className="text-sm font-medium truncate">{user.name}</p>
+            <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+          </div>
         </div>
 
         <DropdownMenuSeparator className="my-0" />

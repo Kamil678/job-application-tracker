@@ -12,6 +12,7 @@ import { AuthFormError } from "@/components/auth/form-error";
 import { authClient } from "@/lib/auth/auth-client";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export function SecurityForm() {
   const router = useRouter();
@@ -83,10 +84,10 @@ export function SecurityForm() {
         </CardHeader>
         <CardContent className="px-6 space-y-4">
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex gap-1.5 mb-1.5">
+            <Label className="text-xs font-semibold text-muted-foreground uppercase flex items-start gap-1.5 mb-1.5">
               <Lock size={13} />
-              <span>Current password</span>
-            </label>
+              Current password
+            </Label>
             <PasswordInput
               id="current_password"
               placeholder="••••••••"
@@ -99,10 +100,10 @@ export function SecurityForm() {
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex gap-1.5 mb-1.5">
+            <Label className="text-xs font-semibold text-muted-foreground uppercase flex items-start gap-1.5 mb-1.5">
               <Lock size={13} />
               <span>New password</span>
-            </label>
+            </Label>
             <PasswordInput
               id="new_password"
               placeholder="••••••••"
@@ -116,10 +117,10 @@ export function SecurityForm() {
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex gap-1.5 mb-1.5">
+            <Label className="text-xs font-semibold text-muted-foreground uppercase flex items-start gap-1.5 mb-1.5">
               <Lock size={13} />
               <span>Confirm new password</span>
-            </label>
+            </Label>
             <PasswordInput
               id="confirm_password"
               placeholder="••••••••"

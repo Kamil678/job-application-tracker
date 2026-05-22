@@ -2,7 +2,7 @@ import type { ProfileUser } from "./types";
 
 function StatCard({ label, value, color }: { label: string; value: number; color: string }) {
   return (
-    <div className="flex flex-col gap-1 p-4 rounded-2xl bg-background border border-border">
+    <div className="flex flex-col gap-1 p-4 rounded-lg bg-background border border-border">
       <span className={`text-2xl font-bold ${color}`}>{value}</span>
       <span className="text-xs text-muted-foreground font-medium">{label}</span>
     </div>
