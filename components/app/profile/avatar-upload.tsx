@@ -38,7 +38,6 @@ export function AvatarUpload({ user, onUploaded }: AvatarUploadProps) {
 
   const isBusy = status !== "idle";
 
-  // Zwolnij blob URL przy odmontowaniu
   useEffect(() => {
     return () => {
       if (preview?.startsWith("blob:")) URL.revokeObjectURL(preview);

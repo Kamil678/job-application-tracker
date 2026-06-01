@@ -29,7 +29,7 @@ export function AppShell({ user, children, onAddApplication = () => {} }: AppShe
 
       <div className="flex flex-col flex-1 overflow-hidden">
         <AppTopbar onMenuOpen={() => setMobileOpen(true)} onAddApplication={onAddApplication} />
-        <main className="flex-1 overflow-y-auto bg-background p-5">{children}</main>
+        <main className="flex-1 overflow-y-auto bg-white p-5">{children}</main>
       </div>
     </div>
   );

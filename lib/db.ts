@@ -47,3 +47,8 @@ async function connectDB() {
 }
 
 export default connectDB;
+
+export async function getDb() {
+  const mongoose = await connectDB();
+  return mongoose.connection.getClient().db();
+}

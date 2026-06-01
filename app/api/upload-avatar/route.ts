@@ -1,17 +1,8 @@
-import { v2 as cloudinary } from "cloudinary";
+import cloudinary from "@/lib/cloudinary";
 import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
-import { MongoClient } from "mongodb";
 import { ObjectId } from "mongodb";
-
-const client = new MongoClient(process.env.MONGODB_URI!);
-const db = client.db();
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+import { getDb } from "@/lib/db";
 
 export async function POST(req: Request) {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -35,6 +26,7 @@ export async function POST(req: Request) {
     transformation: [{ width: 256, height: 256, crop: "fill", gravity: "face" }],
   });
 
+  const db = await getDb();
   await db.collection("user").updateOne({ _id: new ObjectId(session.user.id) }, { $set: { image: result.secure_url } });
 
   return Response.json({ url: result.secure_url });

@@ -1,7 +1,9 @@
 import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { headers } from "next/headers";
+import { cache } from "react";
 import connectDB from "../db";
+import { initUserBoard } from "../init-user-board";
 
 const mongooseInstance = await connectDB();
 const client = mongooseInstance.connection.getClient();
@@ -28,12 +30,19 @@ export const auth = betterAuth({
       bio: { type: "string", nullable: true },
     },
   },
+  databaseHooks: {
+    user: {
+      create: {
+        after: async (user) => {
+          if (user.id) {
+            await initUserBoard(user.id);
+          }
+        },
+      },
+    },
+  },
 });
 
-export async function getSession() {
-  const result = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  return result;
-}
+export const getSession = cache(async () => {
+  return auth.api.getSession({ headers: await headers() });
+});

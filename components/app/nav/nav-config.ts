@@ -16,9 +16,10 @@ export interface NavSection {
 }
 
 export interface User {
+  id: string;
   name: string;
   email: string;
-  image: string;
+  image?: string | null;
 }
 
 export const NAV: NavSection[] = [
@@ -66,7 +67,7 @@ export const NAV: NavSection[] = [
 export const PAGE_TITLES: Record<string, string> = {
   "/app/dashboard": "Dashboard",
   "/applications": "Applications",
-  "/app/kanban": "Kanban",
+  "/app/board": "Board",
   "/app/calendar": "Calendar",
   "/app/settings": "Settings",
 };

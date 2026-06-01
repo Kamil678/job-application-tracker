@@ -26,8 +26,8 @@ export function UserDropdown({ user }: UserDropdownProps) {
   const initials = getInitials(user.name);
 
   async function handleSignOut() {
-    const resault = await authClient.signOut();
-    if (resault?.data?.success) {
+    const result = await authClient.signOut();
+    if (result?.data?.success) {
       router.push("/login");
     } else {
       alert("Error during sign out");

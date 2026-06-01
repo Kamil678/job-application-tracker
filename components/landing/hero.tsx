@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { StatusBadge } from "@/components/status-badge";
+import { StatusBadge } from "@/components/landing/status-badge";
 import { ArrowRight, MapPin, CalendarDays } from "lucide-react";
 import Link from "next/link";
 
