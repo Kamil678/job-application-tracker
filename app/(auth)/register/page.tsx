@@ -4,16 +4,16 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
-import { signUp } from "@/lib/auth/auth-client";
+import { signUp } from "@/modules/auth/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { AuthCard } from "@/components/auth/auth-card";
-import { SocialAuthButtons } from "@/components/auth/social-auth-buttons";
-import { AuthDivider } from "@/components/auth/divider";
-import { AuthFormError } from "@/components/auth/form-error";
-import { PasswordInput } from "@/components/auth/password-input";
-import { PasswordStrength } from "@/components/auth/password-strength";
+import { AuthCard } from "@/features/auth/components/auth-card";
+import { SocialAuthButtons } from "@/features/auth/components/social-auth-buttons";
+import { AuthDivider } from "@/features/auth/components/divider";
+import { AuthFormError } from "@/features/auth/components/form-error";
+import { PasswordInput } from "@/features/auth/components/password-input";
+import { PasswordStrength } from "@/features/auth/components/password-strength";
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -37,7 +37,7 @@ export default function SignUpPage() {
       if (authError) {
         setError(authError.message ?? "Could not create account. Please try again.");
       } else {
-        router.push("/app/dashboard");
+        router.push("/dashboard");
       }
     } catch (e) {
       setError("An unexpected error occurred");
@@ -60,7 +60,7 @@ export default function SignUpPage() {
       </div>
 
       <div className="space-y-4">
-        <SocialAuthButtons callbackURL="/app/dashboard" />
+        <SocialAuthButtons callbackURL="/dashboard" />
         <AuthDivider label="or sign up with email" />
 
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>

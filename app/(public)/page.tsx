@@ -1,12 +1,12 @@
-import { Hero } from "@/components/landing/hero";
-import { SocialProof } from "@/components/landing/social-proof";
-import { Features } from "@/components/landing/features";
-import { HowItWorks } from "@/components/landing/how-it-works";
-import { Stats } from "@/components/landing/stats";
-import { Pricing } from "@/components/landing/pricing";
-import { FAQ } from "@/components/landing/faq";
-import { CTA } from "@/components/landing/cta";
-import { Footer } from "@/components/landing/footer";
+import { Hero } from "@/features/landing/components/hero";
+import { SocialProof } from "@/features/landing/components/social-proof";
+import { Features } from "@/features/landing/components/features";
+import { HowItWorks } from "@/features/landing/components/how-it-works";
+import { Stats } from "@/features/landing/components/stats";
+import { Pricing } from "@/features/landing/components/pricing";
+import { FAQ } from "@/features/landing/components/faq";
+import { CTA } from "@/features/landing/components/cta";
+import { Footer } from "@/features/landing/components/footer";
 
 export default function LandingPage() {
   return (

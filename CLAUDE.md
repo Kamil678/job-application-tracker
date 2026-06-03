@@ -26,12 +26,12 @@ app/
   layout.tsx              # Root layout — adds Toaster, Geist fonts
   (public)/               # Landing page, no auth
   (auth)/                 # Login / register pages
-  app/                    # Protected app shell — redirects to /login if no session
+  (dashboard)/            # Protected app shell — redirects to /login if no session
     layout.tsx            # Server component: calls getSession(), wraps children in AppShell
-    board/                # Kanban board page
-    dashboard/
-    applications/
-    settings/
+    board/                # Kanban board page  → /board
+    dashboard/            #                   → /dashboard
+    applications/         #                   → /applications
+    settings/             #                   → /settings
   api/
     auth/[...all]/        # better-auth catch-all route handler
     upload-avatar/        # POST: Cloudinary upload, updates user.image in MongoDB
@@ -40,22 +40,26 @@ app/
     update-profile.ts     # Server action: validates and writes profile fields to MongoDB
 ```
 
-The `proxy.ts` file at the root acts as Next.js middleware (redirects authenticated users away from `/login` and `/register`).
+`middleware.ts` at the root redirects authenticated users away from `/login` and `/register`.
 
-### Auth (`lib/auth/`)
+### Auth (`modules/auth/`)
 
-- **Server**: `auth.ts` — `betterAuth` instance backed by `mongodbAdapter`. Exposes `getSession()` helper for Server Components.
-- **Client**: `auth-client.ts` — exports `signIn`, `signUp`, `signOut`, `useSession`, `changePassword`, `deleteUser` from `better-auth/react`.
+- **Server**: `server.ts` — `betterAuth` instance backed by `mongodbAdapter`. Exposes `getSession()` helper for Server Components.
+- **Client**: `client.ts` — exports `signIn`, `signUp`, `signOut`, `useSession`, `changePassword`, `deleteUser` from `better-auth/react`.
 - On user creation, a `databaseHooks.user.create.after` callback calls `initUserBoard()` to seed the user's default Kanban board with five columns.
 - Extended user fields (jobTitle, location, phone, websiteUrl, githubUrl, linkedinUrl, bio) are declared in `betterAuth`'s `user.additionalFields` and stored directly on the `user` collection.
 
-### Database (`lib/`)
+### Database (`modules/db/`)
 
-- `db.ts` — singleton Mongoose connection with module-level caching via `global.mongoose`.
+- `client.ts` — singleton Mongoose connection with module-level caching via `global.mongoose`. Exports `connectDB` (default) and `getDb()`.
 - `models/board.ts` — `Board { name, userId }` — one board per user by convention.
 - `models/column.ts` — `Column { boardId, name, order, color? }`.
 - `models/job-application.ts` — `JobApplication { userId, boardId, columnId, company, position, status, workType, order, … }`. Status enum: `wish_list | applied | interview | offer | rejected | ghost`.
-- `lib/init-user-borad.ts` — creates the default "Job Board" + five columns on first sign-up.
+- `init-user-board.ts` — creates the default "Job Board" + five columns on first sign-up.
+
+### Storage (`modules/storage/`)
+
+- `cloudinary.ts` — configured Cloudinary v2 instance.
 
 ### UI stack
 
@@ -65,20 +69,25 @@ The `proxy.ts` file at the root acts as Next.js middleware (redirects authentica
 - **react-hook-form** + **zod** for forms. Schemas are co-located with the form (e.g. `components/app/profile/profile.schema.ts`).
 - **sonner** for toasts — `<Toaster />` is mounted in the root layout.
 
+### Features (`features/`)
+
+Domain logic colocated by feature — components, actions, schemas, types in one place.
+
+- `features/auth/` — `components/` (AuthCard, AuthBackground, PasswordInput, SocialAuthButtons…)
+- `features/board/` — `components/board-client.tsx` — fully client-side Kanban (currently using mock data)
+- `features/landing/` — `components/` (Hero, Features, Pricing, FAQ, Navbar, Footer…)
+- `features/profile/` — `actions.ts` (server action), `schemas.ts`, `types.ts`, `components/` (ProfilePage, ProfileForm, AvatarUpload, SecurityForm, ProfileStats)
+- `features/shell/` — `components/` (AppShell, AppSidebar, AppTopbar, NavItem, UserDropdown, nav-config.ts)
+
 ### Component organisation
 
 ```
 components/
-  ui/           # shadcn primitives — do not edit manually
-  app/
-    nav/        # AppShell (client), AppSidebar, AppTopbar, nav-config.ts (NAV array + helpers)
-    board/      # BoardClient — fully client-side Kanban (currently using mock data)
-    profile/    # ProfilePage, ProfileForm, AvatarUpload, SecurityForm, profile.schema.ts
-  auth/         # Auth page building blocks (cards, inputs, social buttons)
-  landing/      # Marketing page sections
+  ui/     # shadcn primitives — do not edit manually
+  logo.tsx
 ```
 
-`AppShell` is a client component that owns the mobile-sidebar Sheet state and renders `AppSidebar` + `AppTopbar`. Navigation items are driven by the `NAV` array in `nav-config.ts`.
+`AppShell` (in `features/shell/`) is a client component that owns the mobile-sidebar Sheet state and renders `AppSidebar` + `AppTopbar`. Navigation items are driven by the `NAV` array in `nav-config.ts`.
 
 ### Environment variables
 

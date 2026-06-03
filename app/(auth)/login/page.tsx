@@ -4,15 +4,15 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
-import { signIn } from "@/lib/auth/auth-client";
+import { signIn } from "@/modules/auth/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { AuthCard } from "@/components/auth/auth-card";
-import { SocialAuthButtons } from "@/components/auth/social-auth-buttons";
-import { AuthDivider } from "@/components/auth/divider";
-import { AuthFormError } from "@/components/auth/form-error";
-import { PasswordInput } from "@/components/auth/password-input";
+import { AuthCard } from "@/features/auth/components/auth-card";
+import { SocialAuthButtons } from "@/features/auth/components/social-auth-buttons";
+import { AuthDivider } from "@/features/auth/components/divider";
+import { AuthFormError } from "@/features/auth/components/form-error";
+import { PasswordInput } from "@/features/auth/components/password-input";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -34,7 +34,7 @@ export default function SignInPage() {
       if (authError) {
         setError(authError.message ?? "Invalid email or password.");
       } else {
-        router.push("/app/dashboard");
+        router.push("/dashboard");
       }
     } catch (e) {
       setError("An unexpected error occurred");
@@ -56,7 +56,7 @@ export default function SignInPage() {
       </div>
 
       <div className="space-y-4">
-        <SocialAuthButtons callbackURL="/app/dashboard" />
+        <SocialAuthButtons callbackURL="/dashboard" />
         <AuthDivider />
 
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>

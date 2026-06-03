@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import { AuthBackground } from "@/components/auth/auth-background";
-import { AuthBrandHeader } from "@/components/auth/auth-brand-header";
+import { AuthBackground } from "@/features/auth/components/auth-background";
+import { AuthBrandHeader } from "@/features/auth/components/auth-brand-header";
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
   return (

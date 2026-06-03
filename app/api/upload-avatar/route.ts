@@ -1,8 +1,8 @@
-import cloudinary from "@/lib/cloudinary";
-import { auth } from "@/lib/auth/auth";
+import cloudinary from "@/modules/storage/cloudinary";
+import { auth } from "@/modules/auth/server";
 import { headers } from "next/headers";
 import { ObjectId } from "mongodb";
-import { getDb } from "@/lib/db";
+import { getDb } from "@/modules/db/client";
 
 export async function POST(req: Request) {
   const session = await auth.api.getSession({ headers: await headers() });
