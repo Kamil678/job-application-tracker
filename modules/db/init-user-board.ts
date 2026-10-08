@@ -2,12 +2,12 @@ import connectDB from "./client";
 import { Board, Column } from "./models";
 
 const DEFAULT_COLUMNS = [
-  { name: "Wish List", order: 0 },
-  { name: "Applied", order: 1 },
-  { name: "Interviewing", order: 2 },
-  { name: "Offer", order: 3 },
-  { name: "Rejected", order: 4 },
-];
+  { name: "Wish List", order: 0, status: "wish_list" },
+  { name: "Applied", order: 1, status: "applied" },
+  { name: "Interviewing", order: 2, status: "interview" },
+  { name: "Offer", order: 3, status: "offer" },
+  { name: "Rejected", order: 4, status: "rejected" },
+] as const;
 
 export async function initUserBoard(userId: string) {
   await connectDB();

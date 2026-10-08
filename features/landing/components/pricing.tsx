@@ -17,7 +17,7 @@ export function Pricing() {
     <section id="pricing" className="py-28 max-w-7xl mx-auto px-6">
       <div className="text-center mb-16">
         <h2 className="text-4xl font-bold tracking-tight text-foreground mb-4">Simple, transparent pricing.</h2>
-        <p className="text-lg text-muted-foreground">Start free. Upgrade when you're ready.</p>
+        <p className="text-lg text-muted-foreground">Start free. Upgrade when you&apos;re ready.</p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">

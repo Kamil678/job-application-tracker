@@ -7,7 +7,7 @@ import { ArrowRight } from "lucide-react";
 import { signUp } from "@/modules/auth/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { FormField } from "@/components/form-field";
 import { AuthCard } from "@/features/auth/components/auth-card";
 import { SocialAuthButtons } from "@/features/auth/components/social-auth-buttons";
 import { AuthDivider } from "@/features/auth/components/divider";
@@ -64,8 +64,7 @@ export default function SignUpPage() {
         <AuthDivider label="or sign up with email" />
 
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-          <div className="space-y-1.5">
-            <Label htmlFor="name">Full name</Label>
+          <FormField label="Full name" id="name">
             <Input
               id="name"
               type="text"
@@ -76,10 +75,9 @@ export default function SignUpPage() {
               required
               className="h-10 bg-card border-border focus-visible:ring-ring"
             />
-          </div>
+          </FormField>
 
-          <div className="space-y-1.5">
-            <Label htmlFor="email">Email address</Label>
+          <FormField label="Email address" id="email">
             <Input
               id="email"
               type="email"
@@ -90,10 +88,9 @@ export default function SignUpPage() {
               required
               className="h-10 bg-card border-border focus-visible:ring-ring"
             />
-          </div>
+          </FormField>
 
-          <div className="space-y-1.5">
-            <Label htmlFor="password">Password</Label>
+          <FormField label="Password" id="password">
             <PasswordInput
               id="password"
               placeholder="At least 8 characters"
@@ -105,7 +102,7 @@ export default function SignUpPage() {
               className="h-10 bg-card border-border focus-visible:ring-ring"
             />
             {password.length > 0 && <PasswordStrength password={password} />}
-          </div>
+          </FormField>
 
           <AuthFormError message={error} />
 

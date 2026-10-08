@@ -3,7 +3,6 @@ import mongoose, { Schema, Document, Types } from "mongoose";
 export interface IBoard extends Document {
   name: string;
   userId: Types.ObjectId;
-  columns: Types.ObjectId[];
   createdAt: Date;
   updatedAt: Date;
 }

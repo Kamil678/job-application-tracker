@@ -59,6 +59,8 @@
   --color-status-rejected-fg: var(--status-rejected-fg);
   --color-status-ghost-bg: var(--status-ghost-bg);
   --color-status-ghost-fg: var(--status-ghost-fg);
+  --color-status-wishlist-bg: var(--status-wishlist-bg);
+  --color-status-wishlist-fg: var(--status-wishlist-fg);
 }
 
 /* ─── LIGHT ─────────────────────────────────── */
@@ -121,6 +123,8 @@
   --status-rejected-fg: #c62828;
   --status-ghost-bg: #eceff1;
   --status-ghost-fg: #546e7a;
+  --status-wishlist-bg: #f3e8ff;
+  --status-wishlist-fg: #7e22ce;
 }
 
 /* ─── DARK ───────────────────────────────────── */
@@ -180,6 +184,8 @@
   --status-rejected-fg: #ef9a9a;
   --status-ghost-bg: rgba(84, 110, 122, 0.18);
   --status-ghost-fg: #90a4ae;
+  --status-wishlist-bg: rgba(126, 34, 206, 0.18);
+  --status-wishlist-fg: #c084fc;
 }
 
 /* ─── Base ──────────────────────────────────────── */

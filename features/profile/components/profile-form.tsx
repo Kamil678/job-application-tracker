@@ -3,65 +3,17 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User, Mail, Phone, MapPin, Briefcase, Globe, Check, Loader2 } from "lucide-react";
+import { Check, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { FormField, INPUT_CLASS, TEXTAREA_CLASS } from "@/components/form-field";
 import { AvatarUpload } from "./avatar-upload";
 import { updateProfile } from "../actions";
 import { profileSchema, type ProfileFormData } from "../schemas";
 import type { ProfileUser } from "../types";
-import type { UseFormRegisterReturn } from "react-hook-form";
-
-function Field({
-  label,
-  id,
-  icon: Icon,
-  placeholder,
-  type = "text",
-  textarea = false,
-  readOnly = false,
-  error,
-  registration,
-}: {
-  label: string;
-  id: string;
-  icon: React.ElementType;
-  placeholder?: string;
-  type?: string;
-  textarea?: boolean;
-  readOnly?: boolean;
-  error?: string;
-  registration?: UseFormRegisterReturn;
-}) {
-  const baseClass =
-    "w-full px-3 py-2.5 rounded-xl border border-border bg-background text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all duration-150";
-
-  return (
-    <div className="flex flex-col gap-1.5">
-      <Label htmlFor={id} className="text-xs font-semibold text-muted-foreground uppercase flex items-center gap-1.5">
-        <Icon size={13} />
-        {label}
-      </Label>
-      {textarea ? (
-        <textarea id={id} placeholder={placeholder} rows={3} readOnly={readOnly} className={`${baseClass} resize-none`} {...registration} />
-      ) : (
-        <Input
-          id={id}
-          type={type}
-          placeholder={placeholder}
-          readOnly={readOnly}
-          className="h-10 bg-card border-border focus-visible:ring-ring"
-          {...registration}
-        />
-      )}
-      {error && <p className="text-xs text-destructive">{error}</p>}
-    </div>
-  );
-}
 
 interface ProfileFormProps {
   user: ProfileUser;
@@ -126,76 +78,50 @@ export function ProfileForm({ user }: ProfileFormProps) {
           </CardHeader>
           <CardContent className="px-6 space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Field
-                label="Full name"
-                id="full_name"
-                icon={User}
-                placeholder="Your full name"
-                error={errors.name?.message}
-                registration={register("name")}
-              />
-              <Field label="Email" id="email" icon={Mail} type="email" readOnly placeholder="" />
+              <FormField label="Full name" id="full_name" error={errors.name?.message}>
+                <Input id="full_name" placeholder="Your full name" className={INPUT_CLASS} {...register("name")} />
+              </FormField>
+              <FormField label="Email" id="email">
+                <Input id="email" type="email" readOnly className={INPUT_CLASS} />
+              </FormField>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Field label="Location" id="location" icon={MapPin} placeholder="City, Country" registration={register("location")} />
-              <Field
-                label="Phone"
-                id="phone"
-                icon={Phone}
-                type="tel"
-                placeholder="+1 (555) 000-0000"
-                error={errors.phone?.message}
-                registration={register("phone")}
-              />
+              <FormField label="Location" id="location">
+                <Input id="location" placeholder="City, Country" className={INPUT_CLASS} {...register("location")} />
+              </FormField>
+              <FormField label="Phone" id="phone" error={errors.phone?.message}>
+                <Input id="phone" type="tel" placeholder="+1 (555) 000-0000" className={INPUT_CLASS} {...register("phone")} />
+              </FormField>
             </div>
-            <Field
-              label="Job title"
-              id="job_title"
-              icon={Briefcase}
-              placeholder="e.g. Frontend Developer"
-              registration={register("jobTitle")}
-            />
+            <FormField label="Job title" id="job_title">
+              <Input id="job_title" placeholder="e.g. Frontend Developer" className={INPUT_CLASS} {...register("jobTitle")} />
+            </FormField>
 
             <Separator />
             <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Links</p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Field
-                label="Github"
-                id="githubUrl"
-                icon={Globe}
-                placeholder="https://github.com/you"
-                error={errors.githubUrl?.message}
-                registration={register("githubUrl")}
-              />
-              <Field
-                label="LinkedIn"
-                id="linkedinUrl"
-                icon={Globe}
-                placeholder="https://linkedin.com/in/you"
-                error={errors.linkedinUrl?.message}
-                registration={register("linkedinUrl")}
-              />
+              <FormField label="Github" id="githubUrl" error={errors.githubUrl?.message}>
+                <Input id="githubUrl" placeholder="https://github.com/you" className={INPUT_CLASS} {...register("githubUrl")} />
+              </FormField>
+              <FormField label="LinkedIn" id="linkedinUrl" error={errors.linkedinUrl?.message}>
+                <Input id="linkedinUrl" placeholder="https://linkedin.com/in/you" className={INPUT_CLASS} {...register("linkedinUrl")} />
+              </FormField>
             </div>
-            <Field
-              label="Website"
-              id="websiteUrl"
-              icon={Globe}
-              placeholder="https://yoursite.com"
-              error={errors.websiteUrl?.message}
-              registration={register("websiteUrl")}
-            />
+            <FormField label="Website" id="websiteUrl" error={errors.websiteUrl?.message}>
+              <Input id="websiteUrl" placeholder="https://yoursite.com" className={INPUT_CLASS} {...register("websiteUrl")} />
+            </FormField>
 
             <Separator />
-            <Field
-              label="Bio"
-              id="bio"
-              icon={User}
-              textarea
-              placeholder="A few sentences about yourself..."
-              error={errors.bio?.message}
-              registration={register("bio")}
-            />
+            <FormField label="Bio" id="bio" error={errors.bio?.message}>
+              <textarea
+                id="bio"
+                rows={3}
+                placeholder="A few sentences about yourself..."
+                className={TEXTAREA_CLASS}
+                {...register("bio")}
+              />
+            </FormField>
           </CardContent>
         </Card>
       </div>

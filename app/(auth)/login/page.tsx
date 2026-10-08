@@ -7,7 +7,7 @@ import { ArrowRight } from "lucide-react";
 import { signIn } from "@/modules/auth/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { FormField } from "@/components/form-field";
 import { AuthCard } from "@/features/auth/components/auth-card";
 import { SocialAuthButtons } from "@/features/auth/components/social-auth-buttons";
 import { AuthDivider } from "@/features/auth/components/divider";
@@ -60,8 +60,7 @@ export default function SignInPage() {
         <AuthDivider />
 
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-          <div className="space-y-1.5">
-            <Label htmlFor="email">Email address</Label>
+          <FormField label="Email address" id="email">
             <Input
               id="email"
               type="email"
@@ -72,15 +71,17 @@ export default function SignInPage() {
               required
               className="h-10 bg-card border-border focus-visible:ring-ring"
             />
-          </div>
+          </FormField>
 
-          <div className="space-y-1.5">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="password">Password</Label>
+          <FormField
+            label="Password"
+            id="password"
+            suffix={
               <Link href="/forgot-password" className="text-xs text-primary hover:underline underline-offset-4 transition-colors">
                 Forgot password?
               </Link>
-            </div>
+            }
+          >
             <PasswordInput
               id="password"
               placeholder="••••••••"
@@ -90,7 +91,7 @@ export default function SignInPage() {
               required
               className="h-10 bg-card border-border focus-visible:ring-ring"
             />
-          </div>
+          </FormField>
 
           <AuthFormError message={error} />
 

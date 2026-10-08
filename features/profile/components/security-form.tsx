@@ -12,7 +12,7 @@ import { AuthFormError } from "@/features/auth/components/form-error";
 import { authClient } from "@/modules/auth/client";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { FormField } from "@/components/form-field";
 
 export function SecurityForm() {
   const router = useRouter();
@@ -80,14 +80,10 @@ export function SecurityForm() {
       <Card className="rounded-lg border-border shadow-md">
         <CardHeader className="px-6 pb-3">
           <CardTitle className="text-base">Change password</CardTitle>
-          <CardDescription className="text-xs">Use a strong password that you don't use elsewhere.</CardDescription>
+          <CardDescription className="text-xs">Use a strong password that you don&apos;t use elsewhere.</CardDescription>
         </CardHeader>
         <CardContent className="px-6 space-y-4">
-          <div className="space-y-1.5">
-            <Label className="text-xs font-semibold text-muted-foreground uppercase flex items-start gap-1.5 mb-1.5">
-              <Lock size={13} />
-              Current password
-            </Label>
+          <FormField label="Current password" id="current_password">
             <PasswordInput
               id="current_password"
               placeholder="••••••••"
@@ -97,13 +93,9 @@ export function SecurityForm() {
               required
               className="h-10 bg-card border-border focus-visible:ring-ring"
             />
-          </div>
+          </FormField>
 
-          <div className="space-y-1.5">
-            <Label className="text-xs font-semibold text-muted-foreground uppercase flex items-start gap-1.5 mb-1.5">
-              <Lock size={13} />
-              <span>New password</span>
-            </Label>
+          <FormField label="New password" id="new_password">
             <PasswordInput
               id="new_password"
               placeholder="••••••••"
@@ -114,13 +106,9 @@ export function SecurityForm() {
               className="h-10 bg-card border-border focus-visible:ring-ring"
             />
             {newPassword.length > 0 && <PasswordStrength password={newPassword} />}
-          </div>
+          </FormField>
 
-          <div className="space-y-1.5">
-            <Label className="text-xs font-semibold text-muted-foreground uppercase flex items-start gap-1.5 mb-1.5">
-              <Lock size={13} />
-              <span>Confirm new password</span>
-            </Label>
+          <FormField label="Confirm new password" id="confirm_password">
             <PasswordInput
               id="confirm_password"
               placeholder="••••••••"
@@ -131,7 +119,7 @@ export function SecurityForm() {
               className="h-10 bg-card border-border focus-visible:ring-ring"
             />
             {newPassword && confirmPassword && !passwordsMatch && <AuthFormError message="Passwords don't match" />}
-          </div>
+          </FormField>
 
           <div className="flex justify-end pt-1">
             <Button size="lg" onClick={handleSaveNewPassword} disabled={!canSubmit}>

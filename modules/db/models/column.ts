@@ -1,9 +1,12 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
 
+export type ColumnStatus = "wish_list" | "applied" | "interview" | "offer" | "rejected" | "ghost";
+
 export interface IColumn extends Document {
   boardId: Types.ObjectId;
   name: string;
   order: number;
+  status: ColumnStatus;
   color?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -26,6 +29,11 @@ const ColumnSchema = new Schema<IColumn>(
       type: Number,
       required: true,
       default: 0,
+    },
+    status: {
+      type: String,
+      required: true,
+      enum: ["wish_list", "applied", "interview", "offer", "rejected", "ghost"],
     },
     color: {
       type: String,
