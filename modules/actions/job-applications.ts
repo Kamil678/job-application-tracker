@@ -3,13 +3,22 @@
 import { revalidatePath } from "next/cache";
 import { getSession } from "@/modules/auth/server";
 import connectDB from "@/modules/db/client";
-import Board from "@/modules/db/models/board";
-import Column from "@/modules/db/models/column";
-import JobApplication from "@/modules/db/models/job-application";
-import { createApplicationSchema, type CreateApplicationFormData } from "@/features/applications/schema";
-import { JobApplicationInterface } from "@/features/board/types/types";
+import { Board, Column, JobApplication } from "@/modules/db/models";
+import * as applicationService from "@/modules/applications/service";
+import {
+  createApplicationSchema,
+  updateApplicationSchema,
+  type CreateApplicationFormData,
+  type UpdateApplicationData,
+} from "@/features/applications/schema";
+import type { JobApplicationInterface } from "@/features/board/types/types";
 
-type ActionResult = { success: true; data: JobApplicationInterface } | { success: false; error: string };
+type ActionResult<T = JobApplicationInterface> = { success: true; data: T } | { success: false; error: string };
+
+function revalidateApplicationViews() {
+  revalidatePath("/board");
+  revalidatePath("/dashboard");
+}
 
 export async function createApplication(data: CreateApplicationFormData): Promise<ActionResult> {
   const session = await getSession();
@@ -25,8 +34,7 @@ export async function createApplication(data: CreateApplicationFormData): Promis
   try {
     await connectDB();
 
-    if (!parsedData.company || !parsedData.position || !parsedData.columnId || !parsedData.boardId)
-      return { success: false, error: "Missing required fields" };
+    if (!parsedData.columnId || !parsedData.boardId) return { success: false, error: "Missing required fields" };
 
     const board = await Board.findOne({ _id: parsedData.boardId, userId: session.user.id });
     if (!board) return { success: false, error: "Board not found" };
@@ -47,8 +55,41 @@ export async function createApplication(data: CreateApplicationFormData): Promis
       ...(appliedDate ? { appliedDate: new Date(appliedDate) } : {}),
     });
 
-    revalidatePath("/board");
-    return { success: true, data: JSON.parse(JSON.stringify(application)) };
+    revalidateApplicationViews();
+    return { success: true, data: applicationService.toApplicationDTO(application.toObject()) };
+  } catch {
+    return { success: false, error: "Server error, please try again" };
+  }
+}
+
+export async function updateApplication(id: string, data: UpdateApplicationData): Promise<ActionResult> {
+  const session = await getSession();
+  if (!session?.user) return { success: false, error: "Unauthorized" };
+
+  const parsed = updateApplicationSchema.safeParse(data);
+  if (!parsed.success) {
+    return { success: false, error: parsed.error.issues[0]?.message ?? "Invalid data" };
+  }
+
+  try {
+    const application = await applicationService.updateApplication(session.user.id, id, parsed.data);
+    if (!application) return { success: false, error: "Application not found" };
+
+    revalidateApplicationViews();
+    return { success: true, data: application };
+  } catch {
+    return { success: false, error: "Server error, please try again" };
+  }
+}
+
+export async function deleteApplication(id: string): Promise<ActionResult<null>> {
+  const session = await getSession();
+  if (!session?.user) return { success: false, error: "Unauthorized" };
+
+  try {
+    await applicationService.deleteApplication(session.user.id, id);
+    revalidateApplicationViews();
+    return { success: true, data: null };
   } catch {
     return { success: false, error: "Server error, please try again" };
   }
@@ -76,8 +117,8 @@ export async function moveApplication(applicationId: string, targetColumnId: str
     application.order = maxOrder ? maxOrder.order + 1 : 0;
     await application.save();
 
-    revalidatePath("/board");
-    return { success: true, data: JSON.parse(JSON.stringify(application)) };
+    revalidateApplicationViews();
+    return { success: true, data: applicationService.toApplicationDTO(application.toObject()) };
   } catch {
     return { success: false, error: "Server error, please try again" };
   }

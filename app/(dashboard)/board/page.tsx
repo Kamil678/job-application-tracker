@@ -1,10 +1,9 @@
 import { getSession } from "@/modules/auth/server";
 import connectDB from "@/modules/db/client";
-import Board from "@/modules/db/models/board";
-import Column from "@/modules/db/models/column";
-import JobApplication from "@/modules/db/models/job-application";
+import { Board, Column, JobApplication } from "@/modules/db/models";
+import { toApplicationDTO } from "@/modules/applications/service";
 import { KanbanBoard } from "@/features/board/components/kanban-board";
-import type { InitialBoard, KanbanColumn, JobApplicationInterface as JobApplicationType, Status } from "@/features/board/types/types";
+import type { InitialBoard, KanbanColumn } from "@/features/board/types/types";
 
 export default async function BoardPage() {
   const session = await getSession();
@@ -21,7 +20,7 @@ export default async function BoardPage() {
 
   const [dbColumns, dbApplications] = await Promise.all([
     Column.find({ boardId: board._id }).sort({ order: 1 }).lean(),
-    JobApplication.find({ boardId: board._id }).sort({ order: 1 }).lean(),
+    JobApplication.find({ boardId: board._id }).sort({ order: 1 }).lean<Parameters<typeof toApplicationDTO>[0][]>(),
   ]);
 
   const columns: KanbanColumn[] = dbColumns.map((col) => ({
@@ -31,24 +30,7 @@ export default async function BoardPage() {
     status: col.status ?? "ghost",
   }));
 
-  const applications: JobApplicationType[] = dbApplications.map((app) => ({
-    _id: app._id.toString(),
-    company: app.company,
-    position: app.position,
-    location: app.location,
-    workType: app.workType,
-    status: app.status,
-    order: app.order,
-    description: app.description,
-    source: app.source,
-    appliedDate: app.appliedDate?.toISOString(),
-    salaryMin: app.salaryMin,
-    salaryMax: app.salaryMax,
-    currency: app.currency,
-    tags: app.tags,
-    notes: app.notes,
-    jobUrl: app.jobUrl,
-  }));
+  const applications = dbApplications.map(toApplicationDTO);
 
   const initialBoard: InitialBoard = {
     _id: board._id.toString(),

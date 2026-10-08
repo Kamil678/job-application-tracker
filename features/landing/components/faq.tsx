@@ -29,12 +29,12 @@ export function FAQ() {
       <div className="max-w-2xl mx-auto px-6">
         <h2 className="text-4xl font-bold tracking-tight text-foreground text-center mb-14">Frequently asked questions</h2>
 
-        <Accordion type="single" collapsible className="space-y-3">
+        <Accordion className="space-y-3">
           {FAQS.map(({ q, a }, i) => (
             <AccordionItem
               key={i}
               value={`item-${i}`}
-              className="bg-white rounded-xl border border-border px-5 data-[state=open]:border-blue-200 "
+              className="bg-white rounded-xl border border-border px-5 data-open:border-blue-200"
             >
               <AccordionTrigger className="text-sm font-semibold text-foreground hover:no-underline py-4 cursor-pointer">
                 {q}

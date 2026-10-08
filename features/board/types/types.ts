@@ -19,6 +19,7 @@ export interface JobApplicationInterface {
   notes?: string;
   source?: string;
   jobUrl?: string;
+  createdAt?: string;
 }
 
 export interface KanbanColumn {
