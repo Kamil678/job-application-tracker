@@ -1,47 +1,37 @@
 "use client";
 
 import { createContext, useContext, useState } from "react";
-import type { Status } from "@/features/board/types/types";
+import type { JobApplicationInterface, Status } from "@/features/board/types/types";
 
-interface AddApplicationContextValue {
-  open: boolean;
-  defaultStatus: Status | undefined;
-  defaultColumnId: string | undefined;
-  boardId: string | undefined;
-  openAddApplication: (status?: Status, columnId?: string) => void;
-  closeAddApplication: () => void;
-  setBoardId: (id: string) => void;
+export type ApplicationDialogState =
+  | { mode: "closed" }
+  | { mode: "create"; status?: Status }
+  | { mode: "edit"; app: JobApplicationInterface; onSaved?: (app: JobApplicationInterface) => void };
+
+interface ApplicationDialogContextValue {
+  state: ApplicationDialogState;
+  openCreate: (status?: Status) => void;
+  openEdit: (app: JobApplicationInterface, onSaved?: (app: JobApplicationInterface) => void) => void;
+  close: () => void;
 }
 
-const AddApplicationContext = createContext<AddApplicationContextValue | null>(null);
+const ApplicationDialogContext = createContext<ApplicationDialogContextValue | null>(null);
 
-export function AddApplicationProvider({ children }: { children: React.ReactNode }) {
-  const [open, setOpen] = useState(false);
-  const [defaultStatus, setDefaultStatus] = useState<Status | undefined>();
-  const [defaultColumnId, setDefaultColumnId] = useState<string | undefined>();
-  const [boardId, setBoardId] = useState<string | undefined>();
+export function ApplicationDialogProvider({ children }: { children: React.ReactNode }) {
+  const [state, setState] = useState<ApplicationDialogState>({ mode: "closed" });
 
-  function openAddApplication(status?: Status, columnId?: string) {
-    setDefaultStatus(status);
-    setDefaultColumnId(columnId);
-    setOpen(true);
-  }
+  const value: ApplicationDialogContextValue = {
+    state,
+    openCreate: (status) => setState({ mode: "create", status }),
+    openEdit: (app, onSaved) => setState({ mode: "edit", app, onSaved }),
+    close: () => setState({ mode: "closed" }),
+  };
 
-  function closeAddApplication() {
-    setOpen(false);
-    setDefaultStatus(undefined);
-    setDefaultColumnId(undefined);
-  }
-
-  return (
-    <AddApplicationContext.Provider value={{ open, defaultStatus, defaultColumnId, boardId, openAddApplication, closeAddApplication, setBoardId }}>
-      {children}
-    </AddApplicationContext.Provider>
-  );
+  return <ApplicationDialogContext.Provider value={value}>{children}</ApplicationDialogContext.Provider>;
 }
 
-export function useAddApplication() {
-  const ctx = useContext(AddApplicationContext);
-  if (!ctx) throw new Error("useAddApplication must be used within AddApplicationProvider");
+export function useApplicationDialog() {
+  const ctx = useContext(ApplicationDialogContext);
+  if (!ctx) throw new Error("useApplicationDialog must be used within ApplicationDialogProvider");
   return ctx;
 }

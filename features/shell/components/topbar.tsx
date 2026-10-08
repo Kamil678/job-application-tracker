@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { Menu, Bell, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PAGE_TITLES } from "./nav-config";
-import { useAddApplication } from "@/features/applications/context";
+import { useApplicationDialog } from "@/features/applications/context";
 
 interface AppTopbarProps {
   onMenuOpen: () => void;
@@ -13,7 +13,7 @@ interface AppTopbarProps {
 export function AppTopbar({ onMenuOpen }: AppTopbarProps) {
   const pathname = usePathname();
   const title = PAGE_TITLES[pathname] ?? "App";
-  const { openAddApplication } = useAddApplication();
+  const { openCreate } = useApplicationDialog();
 
   return (
     <header className="h-15 bg-card border-b border-border flex items-center gap-3 px-5 shrink-0">
@@ -31,7 +31,7 @@ export function AppTopbar({ onMenuOpen }: AppTopbarProps) {
         <Bell size={15} />
       </Button>
 
-      <Button size="lg" onClick={() => openAddApplication()}>
+      <Button size="lg" onClick={() => openCreate()}>
         <Plus size={14} aria-hidden="true" />
         <span className="hidden sm:inline">Add application</span>
         <span className="sm:hidden">Add</span>

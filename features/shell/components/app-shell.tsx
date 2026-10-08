@@ -5,8 +5,8 @@ import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { AppSidebar } from "./sidebar";
 import { AppTopbar } from "./topbar";
 import type { User } from "./nav-config";
-import { AddApplicationProvider } from "@/features/applications/context";
-import { AddApplicationDialog } from "@/features/applications/add-application-dialog";
+import { ApplicationDialogProvider } from "@/features/applications/context";
+import { ApplicationDialog } from "@/features/applications/application-dialog";
 
 interface AppShellProps {
   user: User;
@@ -17,7 +17,7 @@ export function AppShell({ user, children }: AppShellProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <AddApplicationProvider>
+    <ApplicationDialogProvider>
       <div className="flex h-screen overflow-hidden">
         <div className="hidden md:flex shrink-0">
           <AppSidebar user={user} />
@@ -35,7 +35,7 @@ export function AppShell({ user, children }: AppShellProps) {
         </div>
       </div>
 
-      <AddApplicationDialog />
-    </AddApplicationProvider>
+      <ApplicationDialog />
+    </ApplicationDialogProvider>
   );
 }

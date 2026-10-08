@@ -29,12 +29,7 @@ const applicationBaseSchema = z.object({
   notes: z.string().optional(),
 });
 
-export const createApplicationSchema = applicationBaseSchema
-  .extend({
-    boardId: z.string().optional(),
-    columnId: z.string().optional(),
-  })
-  .refine(salaryRangeIsValid, salaryRangeError);
+export const createApplicationSchema = applicationBaseSchema.refine(salaryRangeIsValid, salaryRangeError);
 
 export const updateApplicationSchema = applicationBaseSchema
   .omit({ status: true })

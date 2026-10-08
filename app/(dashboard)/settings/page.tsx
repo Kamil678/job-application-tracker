@@ -1,10 +1,10 @@
-import { getSession } from "@/modules/auth/server";
+import { requireSession } from "@/modules/auth/server";
 import { ProfilePage } from "@/features/profile/components/profile-page";
 import type { ProfileUser } from "@/features/profile/types";
 
 export default async function SettingsPage() {
-  const session = await getSession();
-  const user = session!.user;
+  const session = await requireSession();
+  const user = session.user;
 
   const profileUser: ProfileUser = {
     id: user.id,

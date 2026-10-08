@@ -1,4 +1,4 @@
-import { getSession } from "@/modules/auth/server";
+import { requireSession } from "@/modules/auth/server";
 import connectDB from "@/modules/db/client";
 import { Board, Column, JobApplication } from "@/modules/db/models";
 import { toApplicationDTO } from "@/modules/applications/service";
@@ -6,8 +6,8 @@ import { KanbanBoard } from "@/features/board/components/kanban-board";
 import type { InitialBoard, KanbanColumn } from "@/features/board/types/types";
 
 export default async function BoardPage() {
-  const session = await getSession();
-  const userId = session!.user.id;
+  const session = await requireSession();
+  const userId = session.user.id;
 
   await connectDB();
 
@@ -15,7 +15,7 @@ export default async function BoardPage() {
 
   if (!board) {
     const empty: InitialBoard = { _id: "", name: "", userId, columns: [], applications: [] };
-    return <KanbanBoard initialBoard={empty} userId={userId} />;
+    return <KanbanBoard initialBoard={empty} />;
   }
 
   const [dbColumns, dbApplications] = await Promise.all([
@@ -40,5 +40,5 @@ export default async function BoardPage() {
     applications,
   };
 
-  return <KanbanBoard initialBoard={initialBoard} userId={userId} />;
+  return <KanbanBoard initialBoard={initialBoard} />;
 }

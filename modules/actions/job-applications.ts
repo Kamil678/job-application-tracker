@@ -34,23 +34,24 @@ export async function createApplication(data: CreateApplicationFormData): Promis
   try {
     await connectDB();
 
-    if (!parsedData.columnId || !parsedData.boardId) return { success: false, error: "Missing required fields" };
-
-    const board = await Board.findOne({ _id: parsedData.boardId, userId: session.user.id });
+    const board = await Board.findOne({ userId: session.user.id });
     if (!board) return { success: false, error: "Board not found" };
 
-    const column = await Column.findOne({ _id: parsedData.columnId, boardId: board._id });
+    const column = await Column.findOne({ boardId: board._id, status: parsedData.status });
     if (!column) return { success: false, error: "Column not found" };
 
     const { appliedDate, ...rest } = parsedData;
 
-    const maxOrder = (await JobApplication.findOne({ columnId: parsedData.columnId }).sort({ order: -1 }).select("order").lean()) as {
+    const maxOrder = (await JobApplication.findOne({ columnId: column._id }).sort({ order: -1 }).select("order").lean()) as {
       order: number;
     } | null;
 
     const application = await JobApplication.create({
       ...rest,
       userId: session.user.id,
+      boardId: board._id,
+      columnId: column._id,
+      status: column.status,
       order: maxOrder ? maxOrder.order + 1 : 0,
       ...(appliedDate ? { appliedDate: new Date(appliedDate) } : {}),
     });

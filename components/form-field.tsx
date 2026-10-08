@@ -5,6 +5,12 @@ export const INPUT_CLASS = "h-10 bg-card border-border focus-visible:ring-ring";
 export const TEXTAREA_CLASS =
   "w-full rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground outline-none focus-visible:border-ring focus-visible:ring-1 focus-visible:ring-ring transition-colors resize-none";
 
+export const fieldErrorId = (id: string) => `${id}-error`;
+
+export function fieldA11yProps(id: string, error?: string) {
+  return { "aria-invalid": error ? true : undefined, "aria-describedby": error ? fieldErrorId(id) : undefined };
+}
+
 export function FormField({
   label,
   id,
@@ -33,7 +39,11 @@ export function FormField({
         </Label>
       )}
       {children}
-      {error && <p className="text-xs text-destructive">{error}</p>}
+      {error && (
+        <p id={id ? fieldErrorId(id) : undefined} role="alert" className="text-xs text-destructive">
+          {error}
+        </p>
+      )}
     </div>
   );
 }
